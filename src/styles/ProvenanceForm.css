@@ -111,3 +111,13 @@ legend {
     padding: 1rem;
   }
 }
+
+/* ... (keep existing styles) */
+
+.expandable-textarea {
+  min-height: 100px;
+  resize: none;
+  overflow-y: hidden;
+}
+
+/* ... (keep other styles) */

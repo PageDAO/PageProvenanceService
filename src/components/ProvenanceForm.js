@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ExpandableTextArea from './ExpandableTextArea';
 import '../styles/ProvenanceForm.css';
+import ExpandableInput from './ExpandableInput';
 
 const contentTypes = ['Book', 'Article', 'Research Paper', 'Other'];
 
@@ -206,7 +208,7 @@ function ProvenanceForm() {
 
       <div className="form-group">
         <label htmlFor="additionalNotes">Additional Notes:</label>
-        <textarea
+        <ExpandableTextArea
           id="additionalNotes"
           name="additionalNotes"
           value={formData.additionalNotes}
