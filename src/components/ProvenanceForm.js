@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import '../styles/AttestationForm.css';
+import '../styles/ProvenanceForm.css';
 
-const attestationOptions = [
+const contentTypes = ['Book', 'Article', 'Research Paper', 'Other'];
+
+const expandedAttestationOptions = [
   {
     id: 'originalWork',
     text: 'I attest that this is my original work and I hold the necessary rights to distribute it.'
@@ -22,19 +24,31 @@ const attestationOptions = [
   {
     id: 'accurateInformation',
     text: 'I attest that all information provided about this work is accurate and complete to the best of my knowledge.'
-  }
+  },
+  {
+    id: 'editionValidity',
+    text: 'I confirm that this is an authorized edition of the work.'
+  },
+  {
+    id: 'translationRights',
+    text: 'I hold or have been granted the necessary rights for this translation.'
+  },
 ];
-
-function AttestationForm() {
+function ProvenanceForm() {
   const [formData, setFormData] = useState({
     contractAddress: '',
     title: '',
     author: '',
     isbn: '',
     publicationDate: '',
+    contentType: 'Book',
+    edition: '',
+    publisher: '',
+    language: '',
     approvedSources: [''],
     additionalNotes: '',
-    attestations: []
+    attestations: [],
+    customAttestation: ''
   });
   const [errors, setErrors] = useState({});
 
@@ -60,6 +74,11 @@ function AttestationForm() {
     setFormData({ ...formData, approvedSources: [...formData.approvedSources, ''] });
   };
 
+  const removeSource = (index) => {
+    const newSources = formData.approvedSources.filter((_, i) => i !== index);
+    setFormData({ ...formData, approvedSources: newSources });
+  };
+
   const validateForm = () => {
     const newErrors = {};
     if (!formData.contractAddress) newErrors.contractAddress = 'Contract address is required';
@@ -75,79 +94,130 @@ function AttestationForm() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
+      // Here you could add blockchain integration
+      // const contractAddress = await generateSmartContract(formData);
+      // setFormData({ ...formData, contractAddress });
       navigate('/preview', { state: { formData } });
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="attestation-form">
-      <h2>Create Attestation</h2>
-      <div>
+    <form onSubmit={handleSubmit} className="provenance-form">
+      <h2>Create Provenance Artifact</h2>
+      
+      <div className="form-group">
         <label htmlFor="contractAddress">Contract Address:</label>
         <input
-          type="text"
           id="contractAddress"
           name="contractAddress"
+          type="text"
           value={formData.contractAddress}
           onChange={handleChange}
-          required
+          aria-required="true"
+          aria-invalid={!!errors.contractAddress}
         />
-        {errors.contractAddress && <span className="error">{errors.contractAddress}</span>}
+        {errors.contractAddress && <span className="error" role="alert">{errors.contractAddress}</span>}
       </div>
-      <div>
+
+      <div className="form-group">
         <label htmlFor="title">Book Title:</label>
         <input
-          type="text"
           id="title"
           name="title"
+          type="text"
           value={formData.title}
           onChange={handleChange}
-          required
+          aria-required="true"
+          aria-invalid={!!errors.title}
         />
-        {errors.title && <span className="error">{errors.title}</span>}
+        {errors.title && <span className="error" role="alert">{errors.title}</span>}
       </div>
-      <div>
+
+      <div className="form-group">
         <label htmlFor="author">Author:</label>
         <input
-          type="text"
           id="author"
           name="author"
+          type="text"
           value={formData.author}
           onChange={handleChange}
-          required
+          aria-required="true"
+          aria-invalid={!!errors.author}
         />
-        {errors.author && <span className="error">{errors.author}</span>}
+        {errors.author && <span className="error" role="alert">{errors.author}</span>}
       </div>
-      <div>
-        <label htmlFor="isbn">ISBN (optional):</label>
+
+      <div className="form-group">
+        <label htmlFor="isbn">ISBN:</label>
         <input
-          type="text"
           id="isbn"
           name="isbn"
+          type="text"
           value={formData.isbn}
           onChange={handleChange}
         />
       </div>
-      <div>
+
+      <div className="form-group">
+        <label htmlFor="publicationDate">Publication Date:</label>
+        <input
+          id="publicationDate"
+          name="publicationDate"
+          type="month"
+          value={formData.publicationDate}
+          onChange={handleChange}
+        />
+      </div>
+
+      <div className="form-group">
+        <label htmlFor="contentType">Content Type:</label>
+        <select
+          id="contentType"
+          name="contentType"
+          value={formData.contentType}
+          onChange={handleChange}
+        >
+          {contentTypes.map(type => (
+            <option key={type} value={type}>{type}</option>
+          ))}
+        </select>
+      </div>
+
+      <div className="form-group">
         <label>Approved Sources:</label>
         {formData.approvedSources.map((source, index) => (
-          <input
-            key={index}
-            type="url"
-            name="approvedSources"
-            value={source}
-            onChange={(e) => handleChange(e, index)}
-          />
+          <div key={index} className="approved-sources">
+            <input
+              type="url"
+              name="approvedSources"
+              value={source}
+              onChange={(e) => handleChange(e, index)}
+              placeholder="Enter approved source URL"
+            />
+            <button type="button" onClick={() => removeSource(index)}>Remove</button>
+          </div>
         ))}
         <button type="button" onClick={addSource}>Add Source</button>
-        {errors.approvedSources && <span className="error">{errors.approvedSources}</span>}
+        {errors.approvedSources && <span className="error" role="alert">{errors.approvedSources}</span>}
       </div>
-      <div>
-        <h3>Attestations</h3>
-        {attestationOptions.map(option => (
+
+      <div className="form-group">
+        <label htmlFor="additionalNotes">Additional Notes:</label>
+        <textarea
+          id="additionalNotes"
+          name="additionalNotes"
+          value={formData.additionalNotes}
+          onChange={handleChange}
+          placeholder="Enter any additional information about the book's provenance"
+        />
+      </div>
+
+      <fieldset>
+        <legend>Attestations</legend>
+        {expandedAttestationOptions.map(option => (
           <div key={option.id}>
             <input
               type="checkbox"
@@ -160,11 +230,11 @@ function AttestationForm() {
             <label htmlFor={option.id}>{option.text}</label>
           </div>
         ))}
-        {errors.attestations && <span className="error">{errors.attestations}</span>}
-      </div>
+      </fieldset>
+      {errors.attestations && <span className="error" role="alert">{errors.attestations}</span>}
 
       <button type="submit">Generate Provenance Artifact</button>
     </form>
   );
 }
-export default AttestationForm;
+export default ProvenanceForm;

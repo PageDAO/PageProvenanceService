@@ -1,0 +1,113 @@
+
+:root {
+  --primary-color: #00ffff;
+  --background-color: #0a0a0a;
+  --text-color: #ffffff;
+  --input-background: #1a1a1a;
+  --input-border: #333333;
+  --button-hover: #00cccc;
+}
+
+body {
+  background-color: var(--background-color);
+  color: var(--text-color);
+  font-family: 'Inter', sans-serif;
+  line-height: 1.6;
+}
+
+.provenance-form {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.provenance-form h2 {
+  color: var(--primary-color);
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+input[type="text"],
+input[type="url"],
+input[type="month"],
+select,
+textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--input-border);
+  border-radius: 4px;
+  background-color: var(--input-background);
+  color: var(--text-color);
+  font-size: 1rem;
+}
+
+input[type="checkbox"] {
+  margin-right: 0.5rem;
+}
+
+button {
+  background-color: var(--primary-color);
+  color: var(--background-color);
+  border: none;
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button:hover {
+  background-color: var(--button-hover);
+}
+
+.error {
+  color: #ff4444;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+fieldset {
+  border: 1px solid var(--input-border);
+  border-radius: 4px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+legend {
+  color: var(--primary-color);
+  font-weight: 600;
+  padding: 0 0.5rem;
+}
+
+.approved-sources {
+  display: flex;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.approved-sources input {
+  flex-grow: 1;
+  margin-right: 0.5rem;
+}
+
+.approved-sources button {
+  padding: 0.5rem 1rem;
+}
+
+@media (max-width: 768px) {
+  .provenance-form {
+    padding: 1rem;
+  }
+}

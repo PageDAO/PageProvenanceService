@@ -44,6 +44,9 @@ const styles = StyleSheet.create({
     fontSize: 10,
     color: 'grey',
   },
+  publisherInfo: {
+    marginLeft: 10,
+  },
 });
 
 const attestationOptions = {
@@ -69,8 +72,8 @@ function PDFPreview() {
         <Text>This document certifies the legitimacy and provenance of the associated content.</Text>
         
         <View style={styles.section}>
-          <Text style={styles.label}>Contract Address:</Text>
-          <Text style={styles.value}>{`${formData.chainId}:${formData.contractAddress}`}</Text>
+          <Text style={styles.label}>CAIP Address:</Text>
+          <Text style={styles.value}>{formData.caipAddress}</Text>
         </View>
         
         <View style={styles.section}>
@@ -96,6 +99,22 @@ function PDFPreview() {
             <Text style={styles.value}>{formData.publicationDate}</Text>
           </View>
         )}
+        
+        {formData.publisherInfo && (
+          <View style={styles.section}>
+            <Text style={styles.label}>Publisher Information:</Text>
+            <View style={styles.publisherInfo}>
+              <Text style={styles.value}>Publisher: {formData.publisherInfo.name}</Text>
+              <Text style={styles.value}>Format: {formData.publisherInfo.format}</Text>
+              <Text style={styles.value}>Distribution: {formData.publisherInfo.distribution.join(', ')}</Text>
+            </View>
+          </View>
+        )}
+        
+        <View style={styles.section}>
+          <Text style={styles.label}>License:</Text>
+          <Text style={styles.value}>{formData.isCC0 ? 'CC0' : 'All Rights Reserved'}</Text>
+        </View>
         
         <View style={styles.section}>
           <Text style={styles.label}>Approved Sources:</Text>
@@ -137,4 +156,5 @@ function PDFPreview() {
     </div>
   );
 }
+
 export default PDFPreview;
